@@ -1,0 +1,32 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.rulers": [
+    80
+  ],
+  "editor.selectionHighlight": false,
+  "editor.tabCompletion": "onlySnippets",
+  "editor.wordBasedSuggestions": "off",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "dart.lineLength": 80,
+  "dart.enableSdkFormatter": true,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.closingLabels": true,
+  "dart.showInspectorNotificationsForWidgetErrors": true,
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  "emmet.includeLanguages": {
+    "dart": "html"
+  },
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "errorLens.enabled": true,
+  "errorLens.messageEnabled": true,
+  "errorLens.statusBarMessageEnabled": true
+} 
