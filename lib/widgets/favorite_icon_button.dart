@@ -9,46 +9,36 @@ class FavoriteIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 32,
-      // child: ElevatedButton(
-      //   onPressed: () {
-      //     print('Favorite Icon Button Pressed');
-      //     foregroundColor: const Color.fromARGB(255, 229, 81, 81),
-      //     backgroundColor: const Color.fromARGB(221, 49, 55, 157),
-      //   },
-      //   style: ElevatedButton.styleFrom(
-      //     foregroundColor: Colors.white,
-      //     backgroundColor: Colors.black87,
-      //     shape: const CircleBorder(),
-      //     elevation: 0,
-      //     padding: const EdgeInsets.all(4),
-      //   ),
-      //   child: const Icon(Icons.favorite_border, color: Colors.white, size: 18),
-      child: Obx(
-        () => ElevatedButton(
-          onPressed: () {
-            // isFavorite.toggle();
-            isFavorite.value = !isFavorite.value;
-            print('Favorite Icon Button Pressed');
-          },
-          style: ElevatedButton.styleFrom(
-            foregroundColor: isFavorite.value
-                ? ColorFactory.primary
-                : ColorFactory.background,
-            backgroundColor: isFavorite.value
-                ? ColorFactory.accent
-                : ColorFactory.textBlack,
-            shape: const CircleBorder(),
-            elevation: 0,
-            padding: const EdgeInsets.all(4),
-          ),
-          child: Icon(
-            isFavorite.value ? Icons.favorite : Icons.favorite_border,
-            color: isFavorite.value
-                ? ColorFactory.primary
-                : ColorFactory.background,
-            size: 18,
+    return Positioned(
+      top: 12,
+      right: 8,
+      child: SizedBox(
+        height: 32,
+        child: Obx(
+          () => ElevatedButton(
+            onPressed: () {
+              isFavorite.toggle();
+              // isFavorite.value = !isFavorite.value;
+              print('Favorite Icon Button Pressed');
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: isFavorite.value
+                  ? ColorFactory.primary
+                  : ColorFactory.background,
+              backgroundColor: isFavorite.value
+                  ? ColorFactory.buttonField
+                  : ColorFactory.textBlack,
+              shape: const CircleBorder(),
+              elevation: 0,
+              padding: const EdgeInsets.all(4),
+            ),
+            child: Icon(
+              isFavorite.value ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite.value
+                  ? ColorFactory.primary
+                  : ColorFactory.background,
+              size: 18,
+            ),
           ),
         ),
       ),

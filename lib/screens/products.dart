@@ -65,51 +65,56 @@ class ProductsScreen extends StatelessWidget {
           itemCount: controller.products.length,
           itemBuilder: (context, index) {
             final product = controller.products[index];
-            return Card(
-              // FavoriteIconButton(),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  FavoriteIconButton(),
+            return Stack(
+              children: [
+                Card(
+                  // FavoriteIconButton(),
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // FavoriteIconButton(),
 
-                  // Align(
-                  //   alignment: Alignment.topRight,
-                  //   child: Icon(Icons.favorite_outline_rounded),
-                  // ),
-                  Expanded(
-                    // Takes available height inside card
-                    child: Image.network(
-                      product.images?[0] ?? '',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          product.title ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      // Align(
+                      //   alignment: Alignment.topRight,
+                      //   child: Icon(Icons.favorite_outline_rounded),
+                      // ),
+                      Expanded(
+                        // Takes available height inside card
+                        child: Image.network(
+                          product.images?[0] ?? '',
+                          fit: BoxFit.cover,
                         ),
-                        Text(
-                          '₺${product.price}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              product.title ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '₺${product.price}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                FavoriteIconButton(),
+              ],
             );
           },
         );

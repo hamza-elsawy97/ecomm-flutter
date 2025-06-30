@@ -66,6 +66,7 @@ class SignUpScreen extends StatelessWidget {
               controller: passwordController,
               hintText: 'Password',
               isPassword: true,
+              // _obsecureText: true,
             ),
             const SizedBox(height: 20),
             // Terms & Conditions

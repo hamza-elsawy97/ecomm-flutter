@@ -51,7 +51,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
                 });
               },
               icon: Icon(
-                _obsecureText ? Icons.visibility : Icons.visibility_off,
+                _obsecureText ? Icons.visibility_off : Icons.visibility,
                 color: ColorFactory.textGray,
               ),
             ),
