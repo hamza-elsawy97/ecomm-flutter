@@ -39,13 +39,6 @@ class ProductsScreen extends StatelessWidget {
               .toList(),
           options: CarouselOptions(autoPlay: true, aspectRatio: 16 / 9),
         );
-        // CarouselSlider(
-        //   items: controller.products.map((product) => CategoryCard(category: Category(id: product.category.id, name: product.title ?? '', image: product.images?[0] ?? ''),)).toList(),
-        //   options: CarouselOptions(
-        //     autoPlay: true,
-        //     aspectRatio: 16/9,
-        //   ),
-        // ),
 
         if (controller.products.isEmpty) {
           // Optionally trigger fetch here, or use FutureBuilder
@@ -67,7 +60,9 @@ class ProductsScreen extends StatelessWidget {
             final product = controller.products[index];
             return Stack(
               children: [
+                //ClipRRect
                 Card(
+                  elevation: 0,
                   // FavoriteIconButton(),
                   color: Colors.white,
                   child: Column(
