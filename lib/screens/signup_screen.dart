@@ -11,19 +11,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final AuthController authCtrl = Get.put(AuthController());
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isAgreed = false;
+
+  @override
   Widget build(BuildContext context) {
-    final AuthController authCtrl = Get.put(AuthController());
-
-    TextEditingController nameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    bool isAgreed = false;
-
-    DimLoadingDialog dimDialog = DimLoadingDialog(
+    final DimLoadingDialog dimDialog = DimLoadingDialog(
       context,
       blur: 2,
       backgroundColor: const Color(0x33000000),
@@ -74,8 +78,10 @@ class SignUpScreen extends StatelessWidget {
               children: [
                 Checkbox(
                   value: isAgreed,
-                  onChanged: (value) {
-                    isAgreed = value ?? false;
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      isAgreed = newValue ?? false;
+                    });
                   },
                 ),
                 Expanded(

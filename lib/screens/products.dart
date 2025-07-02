@@ -6,12 +6,16 @@ import '../controllers/categories_controller.dart';
 import '../controllers/products_controller.dart'; // Correct import
 import '../widgets/category_card.dart';
 import '../widgets/favorite_icon_button.dart';
+import '../widgets/search_bar.dart';
 
 class ProductsScreen extends StatelessWidget {
   final ProductsController controller = Get.put(ProductsController());
   final CategoriesController categoriesController = Get.put(
     CategoriesController(),
   );
+
+  final searchController = TextEditingController();
+  final RxString searchQuery = ''.obs;
 
   // final FavoriteController favoriteController = Get.put(FavoriteController());
 
@@ -21,25 +25,6 @@ class ProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        // carousel_slider
-        categoriesController.getCategories().then(
-          (list) => categoriesController.categories.value = list,
-        );
-        CarouselSlider(
-          items: categoriesController.categories
-              .map(
-                (category) => CategoryCard(
-                  category: Category(
-                    id: category.id?.toString() ?? '',
-                    name: category.name ?? '',
-                    image: category.image ?? '',
-                  ),
-                ),
-              )
-              .toList(),
-          options: CarouselOptions(autoPlay: true, aspectRatio: 16 / 9),
-        );
-
         if (controller.products.isEmpty) {
           // Optionally trigger fetch here, or use FutureBuilder
           controller.getProducts().then(
@@ -48,70 +33,121 @@ class ProductsScreen extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
 
-        return GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.7, // Controls the height
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: controller.products.length,
-          itemBuilder: (context, index) {
-            final product = controller.products[index];
-            return Stack(
-              children: [
-                //ClipRRect
-                Card(
-                  elevation: 0,
-                  // FavoriteIconButton(),
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // FavoriteIconButton(),
-
-                      // Align(
-                      //   alignment: Alignment.topRight,
-                      //   child: Icon(Icons.favorite_outline_rounded),
-                      // ),
-                      Expanded(
-                        // Takes available height inside card
-                        child: Image.network(
-                          product.images?[0] ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              product.title ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              '₺${product.price}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+        // Filter products by search query
+        final filteredProducts = controller.products
+            .where(
+              (product) =>
+                  product.title != null &&
+                  product.title!.toLowerCase().contains(
+                    searchQuery.value.toLowerCase(),
                   ),
+            )
+            .toList();
+
+        return Column(
+          children: [
+            ReusableSearchBar(
+              controller: searchController,
+              onChanged: (value) {
+                searchQuery.value = value;
+              },
+            ),
+            // You may want to wrap CarouselSlider in a SizedBox for height
+            SizedBox(
+              height: 200,
+              child: CarouselSlider(
+                items: categoriesController.categories
+                    .map(
+                      (category) => CategoryCard(
+                        category: Category(
+                          id: category.id?.toString() ?? '',
+                          name: category.name ?? '',
+                          image: category.image ?? '',
+                        ),
+                      ),
+                    )
+                    .toList(),
+                options: CarouselOptions(autoPlay: true, aspectRatio: 16 / 9),
+              ),
+            ),
+            // Expanded to fill the rest of the space with the grid
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                 ),
-                FavoriteIconButton(),
-              ],
-            );
-          },
+                itemCount: filteredProducts.length,
+                itemBuilder: (context, index) {
+                  final product = filteredProducts[index];
+                  return Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Image.network(
+                                  product.images?[0] ?? '',
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Center(
+                                      child: Image.asset(
+                                        'assets/images/placeholder.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      product.title ?? '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      '₺${product.price}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      FavoriteIconButton(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         );
       }),
     );

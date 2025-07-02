@@ -24,22 +24,20 @@ class CategoryCard extends StatelessWidget {
       child: category != null
           ? Stack(
               children: [
-                Card(
-                  color: Colors.grey.shade100,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  elevation: 4,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.18,
-                    width: double.maxFinite,
-                    child: Image.network(
-                      category!.image,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Center(child: Icon(Icons.error)),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    color: Colors.grey.shade100,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.18,
+                      width: double.maxFinite,
+                      child: Image.network(
+                        category!.image,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Center(child: Icon(Icons.error)),
+                      ),
                     ),
                   ),
                 ),
@@ -63,17 +61,15 @@ class CategoryCard extends StatelessWidget {
                 ),
               ],
             )
-          : Card(
-              color: Colors.grey.shade100,
-              elevation: 4,
-              margin: const EdgeInsets.only(bottom: 16),
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.18,
-                child: const Center(child: CircularProgressIndicator()),
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                color: Colors.grey.shade100,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.18,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
               ),
             ),
     );
