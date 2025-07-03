@@ -52,99 +52,111 @@ class ProductsScreen extends StatelessWidget {
                 searchQuery.value = value;
               },
             ),
-            // You may want to wrap CarouselSlider in a SizedBox for height
-            SizedBox(
-              height: 200,
-              child: CarouselSlider(
-                items: categoriesController.categories
-                    .map(
-                      (category) => CategoryCard(
-                        category: Category(
-                          id: category.id?.toString() ?? '',
-                          name: category.name ?? '',
-                          image: category.image ?? '',
-                        ),
-                      ),
-                    )
-                    .toList(),
-                options: CarouselOptions(autoPlay: true, aspectRatio: 16 / 9),
-              ),
-            ),
-            // Expanded to fill the rest of the space with the grid
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: filteredProducts.length,
-                itemBuilder: (context, index) {
-                  final product = filteredProducts[index];
-                  return Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          color: Colors.white,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Image.network(
-                                  product.images?[0] ?? '',
-                                  fit: BoxFit.cover,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
-                                          return child;
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      },
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Center(
-                                      child: Image.asset(
-                                        'assets/images/placeholder.jpg',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  },
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 200,
+                      child: CarouselSlider(
+                        items: categoriesController.categories
+                            .map(
+                              (category) => CategoryCard(
+                                category: Category(
+                                  id: category.id?.toString() ?? '',
+                                  name: category.name ?? '',
+                                  image: category.image ?? '',
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
+                            )
+                            .toList(),
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          aspectRatio: 16 / 9,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.all(10),
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final product = filteredProducts[index];
+                        return Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                color: Colors.white,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      product.title ?? '',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                    Expanded(
+                                      child: Image.network(
+                                        product.images?[0] ?? '',
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            },
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return Center(
+                                                child: Image.asset(
+                                                  'assets/images/placeholder.jpg',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              );
+                                            },
                                       ),
                                     ),
-                                    Text(
-                                      '₺${product.price}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            product.title ?? '',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            '₺${product.price}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                            FavoriteIconButton(),
+                          ],
+                        );
+                      }, childCount: filteredProducts.length),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
                       ),
-                      FavoriteIconButton(),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
