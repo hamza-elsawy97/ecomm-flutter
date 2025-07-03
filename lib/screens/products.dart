@@ -26,7 +26,6 @@ class ProductsScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (controller.products.isEmpty) {
-          // Optionally trigger fetch here, or use FutureBuilder
           controller.getProducts().then(
             (list) => controller.products.value = list,
           );
@@ -63,14 +62,18 @@ class ProductsScreen extends StatelessWidget {
                 slivers: [
                   SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 200,
+                      height: 150,
                       child: CarouselSlider(
                         items: categoriesController.categories
                             .map((category) => CategoryCard(category: category))
                             .toList(),
                         options: CarouselOptions(
                           autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 3),
+                          viewportFraction: 0.33,
                           aspectRatio: 16 / 9,
+                          enlargeCenterPage: false,
+                          enableInfiniteScroll: true,
                         ),
                       ),
                     ),
@@ -85,32 +88,41 @@ class ProductsScreen extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Container(
-                                color: Colors.white,
+                                // color: Colors.white,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Expanded(
-                                      child: Image.network(
-                                        product.images?[0] ?? '',
-                                        fit: BoxFit.cover,
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                              if (loadingProgress == null)
-                                                return child;
-                                              return Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              );
-                                            },
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                              return Center(
-                                                child: Image.asset(
-                                                  'assets/images/placeholder.jpg',
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              );
-                                            },
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          8.0,
+                                        ),
+                                        child: Image.network(
+                                          product.images?[0] ?? '',
+                                          fit: BoxFit.cover,
+                                          loadingBuilder:
+                                              (
+                                                context,
+                                                child,
+                                                loadingProgress,
+                                              ) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return Center(
+                                                  child: Image.asset(
+                                                    'assets/images/placeholder.jpg',
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                );
+                                              },
+                                        ),
                                       ),
                                     ),
                                     Padding(
@@ -127,6 +139,11 @@ class ProductsScreen extends StatelessWidget {
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
+                                          ),
+                                          Text(
+                                            product.category?.name ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 16),
                                           ),
                                           Text(
                                             '₺${product.price}',

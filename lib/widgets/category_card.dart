@@ -9,15 +9,10 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Handle category tap - you can add your navigation logic here
         print('Category tapped: \\${category.name}');
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -27,7 +22,7 @@ class CategoryCard extends StatelessWidget {
                   ? Image.network(
                       category.image!,
                       height: 80,
-                      width: 80,
+                      width: 100,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           Icon(Icons.broken_image, size: 80),
