@@ -1,9 +1,11 @@
 import 'package:authapp/factory/color_factory.dart';
+import 'package:authapp/models/products_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FavoriteIconButton extends StatefulWidget {
-  const FavoriteIconButton({super.key});
+  final ProductsModel? product;
+  const FavoriteIconButton({super.key, this.product});
 
   @override
   State<FavoriteIconButton> createState() => _FavoriteIconButtonState();
@@ -23,8 +25,7 @@ class _FavoriteIconButtonState extends State<FavoriteIconButton> {
           () => ElevatedButton(
             onPressed: () {
               isFavorite.toggle();
-              // isFavorite.value = !isFavorite.value;
-              print('Favorite Icon Button Pressed');
+              print('Favorite Icon Button Pressed: ${widget.product?.title}');
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: isFavorite.value

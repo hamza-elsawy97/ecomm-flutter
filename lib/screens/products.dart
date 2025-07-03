@@ -32,6 +32,12 @@ class ProductsScreen extends StatelessWidget {
           );
           return Center(child: CircularProgressIndicator());
         }
+        if (categoriesController.categories.isEmpty) {
+          categoriesController.getCategories().then(
+            (list) => categoriesController.categories.value = list,
+          );
+          return Center(child: CircularProgressIndicator());
+        }
 
         // Filter products by search query
         final filteredProducts = controller.products
@@ -60,15 +66,7 @@ class ProductsScreen extends StatelessWidget {
                       height: 200,
                       child: CarouselSlider(
                         items: categoriesController.categories
-                            .map(
-                              (category) => CategoryCard(
-                                category: Category(
-                                  id: category.id?.toString() ?? '',
-                                  name: category.name ?? '',
-                                  image: category.image ?? '',
-                                ),
-                              ),
-                            )
+                            .map((category) => CategoryCard(category: category))
                             .toList(),
                         options: CarouselOptions(
                           autoPlay: true,
@@ -144,7 +142,7 @@ class ProductsScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            FavoriteIconButton(),
+                            FavoriteIconButton(product: product),
                           ],
                         );
                       }, childCount: filteredProducts.length),
